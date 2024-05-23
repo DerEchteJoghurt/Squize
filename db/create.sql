@@ -21,7 +21,7 @@ CREATE TABLE Quizze (
 );
 
 -- Quizfragen mit auswahlmöglichkeiten
-CREATE TABLE Questions_choise (
+CREATE TABLE Questions_choice (
 	questions_choise_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	quiz_id INTEGER NOT NULL,
 	question TEXT NOT NULL,
