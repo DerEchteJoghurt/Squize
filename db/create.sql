@@ -22,7 +22,7 @@ CREATE TABLE Quizze (
 
 -- Quizfragen mit auswahlmöglichkeiten
 CREATE TABLE Questions_choice (
-	questions_choise_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	questions_choice_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	quiz_id INTEGER NOT NULL,
 	question TEXT NOT NULL,
 	answer_correct TEXT NOT NULL, --position der Antworten zufällig verteilen
