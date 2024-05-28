@@ -1,6 +1,6 @@
 
 
-class quizDao {
+class QuizDao {
     constructor(dbConnection) {
         this._conn = dbConnection;
     }    
