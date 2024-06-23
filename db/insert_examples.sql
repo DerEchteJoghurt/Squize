@@ -11,4 +11,4 @@ INSERT INTO Leaderboard VALUES (2, 2, 700, 64);
 INSERT INTO Leaderboard VALUES (3, 3, 1500, 45);
 INSERT INTO Leaderboard VALUES (4, 4, 600, 50);
 
-INSERT INTO Quizze VALUES (0, 0, 'testquiz', '2024-05-22', 'testquiz zum testen', 1);'
+INSERT INTO Quizze VALUES (0, 0, 'testquiz', '2024-05-22', 'testquiz zum testen', 1 ,0);
