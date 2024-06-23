@@ -37,15 +37,36 @@ class QuizDao {
         return result;
     }
 
+    getQuestionById(questionId) {
+
+    }
+
+    getQuestionByPosition(quizId, pos) {
+
+    }
+
+    addQuestion(questionObject) {
+
+    }
+
+    updateQuestion(questionObject) {
+
+    }
+
+    deleteQuestion(questionObject) {
+
+    }
+
     createQuiz(quizobject) {
-        var maxql = 'SELECT MAX(quiz_id) FROM Quizze';
-        var stmt = this._conn.prepare(maxql);
-        var max_id = stmt.get();
+        // var maxql = 'SELECT MAX(quiz_id) FROM Quizze';
+        // var stmt = this._conn.prepare(maxql);
+        // var max_id = stmt.get();
+        var placeholder_user = 0
 
         quiz = JSON.parse(quizobject);
-        var sql = 'INSERT INTO Quizze (quiz_id, user_id, quizname, last_edited, beschreibung, is_public) VALUES (?, ?, ?, ?, ?, ?)';
+        var sql = 'INSERT INTO Quizze (user_id, quizname, last_edited, beschreibung, is_public) VALUES (?, ?, ?, ?, ?)';
         var statement = this._conn.prepare(sql);
-        var info = statement.run([max_id + 1, 0, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public]);
+        var info = statement.run([placeholder_user, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public]);
 
         return info.changes;
     }
@@ -81,4 +102,4 @@ class QuizDao {
 
 }
 
-module.exports = quizDao;
+module.exports = QuizDao;
