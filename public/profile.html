@@ -139,66 +139,66 @@
         <!-- Create Modal -->
         <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalTitle" aria-hidden="true">
           <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createModalTitle">Create new Quiz</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p id="errormsg" style="opacity: 0; color: red;"></p>
-                  <form id="newquizform">
-                    <div class="mb-3">
-                      <label for="quiz-title" class="col-form-label">Title:</label>
-                      <input type="text" class="form-control" id="quiz-title">
-                    </div>
-                    <div class="mb-3">
-                      <label for="quiz-description" class="col-form-label">Description:</label>
-                      <textarea class="form-control" id="quiz-description"></textarea>
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="publicSwitchCreate">
-                      <label class="form-check-label" for="publicSwitchCreate">Public</label>
-                    </div>                         
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Create</button>
-                </div>
-                </form>
-                </div>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="createModalTitle">Create new Quiz</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-           </div>
+              <div class="modal-body">
+                <p id="errormsg" style="opacity: 0; color: red;"></p>
+                <form id="newquizform">
+                  <div class="mb-3">
+                    <label for="quiz-title" class="col-form-label">Title:</label>
+                    <input type="text" class="form-control" id="quiz-title">
+                  </div>
+                  <div class="mb-3">
+                    <label for="quiz-description" class="col-form-label">Description:</label>
+                    <textarea class="form-control" id="quiz-description"></textarea>
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="publicSwitchCreate">
+                    <label class="form-check-label" for="publicSwitchCreate">Public</label>
+                  </div>                         
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Create</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Edit Modal -->
         <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
           <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalTitle">Edit Quiz</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p id="errormsg" style="opacity: 0; color: red;">asdasds</p>
-                  <form>
-                    <div class="mb-3">
-                      <label for="quiz-title-edit" class="col-form-label">Title:</label>
-                      <input type="text" class="form-control" id="quiz-title-edit" value="Wissenstest">
-                    </div>
-                    <div class="mb-3">
-                      <label for="quiz-description-edit" class="col-form-label">Description:</label>
-                      <textarea class="form-control" id="quiz-description-edit">Teste dein Wissen in verschiedenen Arten bla bla bla und so weiter........</textarea>
-                    </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="publicSwitchEdit" checked>
-                      <label class="form-check-label" for="publicSwitchEdit">Public</label>
-                    </div>                  
-                  </form>        
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="location.href='/quiz_edit1';">Edit Questions</button>
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Save</button>
-                </div>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Edit Quiz</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-            
+              <div class="modal-body">
+                <p id="errormsg" style="opacity: 0; color: red;">asdasds</p>
+                <form id="editquizform">
+                  <div class="mb-3">
+                    <label for="quiz-title-edit" class="col-form-label">Title:</label>
+                    <input type="text" class="form-control" id="quiz-title-edit" value="Wissenstest">
+                  </div>
+                  <div class="mb-3">
+                    <label for="quiz-description-edit" class="col-form-label">Description:</label>
+                    <textarea class="form-control" id="quiz-description-edit">Teste dein Wissen in verschiedenen Arten bla bla bla und so weiter........</textarea>
+                  </div>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="publicSwitchEdit">
+                    <label class="form-check-label" for="publicSwitchEdit">Public</label>
+                  </div>                  
+                  <div class="modal-footer">
+                    <button id="delete_qz" type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Delete</button>
+                    <button id="edit_qz" type="button" class="btn btn-outline-secondary" onclick="location.href='/quiz_edit1';">Edit Questions</button>
+                    <button id="save_qz" type="submit" class="btn btn-success" data-bs-dismiss="modal">Save</button>
+                  </div>
+                </form> 
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -240,33 +240,68 @@
       $('#newquizform').submit(function(form) {
         form.preventDefault();
 
-        var quizheader = {quizname : "", beschreibung : ""};
+        var quizheader = {quizname : "", beschreibung : "", quiz_id: 0};
         quizheader.lastedit = Date.now().toString();
         quizheader.quizname = $("#quiz-title").val();
         quizheader.beschreibung = $("#quiz-description").val();
         quizheader.is_public = $("#publicSwitchCreate").is(":checked") ? 1 : 0
-        quizheader.is_public = $("#publicSwitchCEdit").is(":checked") ? 1 : 0
         if (quizheader.quizname  == "") {
           $('#errormsg').css("opacity", 100).text("Your Quiz needs a Title").fadeTo(4500, 0);
           console.log("error creating quiz");
           return;
         }
         localStorage.setItem("Quizheader", JSON.stringify(quizheader))
-
         $.ajax({
             url: 'http://localhost:3000/api/quiz/create_quiz',
             method: 'POST',
             contentType: 'application/json; charset=utf-8',
             cache: false,
             dataType: 'json',
-            data: JSON.stringify(localStorage.getItem("Quizheader"))
+            data: localStorage.getItem("Quizheader")
         }).done(function (response) {
             console.dir(response);
+            var quiz = JSON.parse(localStorage.getItem("Quizheader"));
+            quiz.quiz_id = response.quiz_id;
+            localStorage.setItem("Quizheader", JSON.stringify(quiz));
         }).fail(function (jqXHR, statusText, error) {
             console.dir(jqXHR.responseText);
+            return;
         });
         location.href= "/quiz_edit1"
       })});
+
+      $('#editquizform').submit(function(form) {
+        form.preventDefault();
+
+        var quizheader = {quizname : "", beschreibung : ""};
+        quizheader.lastedit = Date.now().toString();
+        quizheader.quizname = $("#quiz-title-edit").val();
+        quizheader.beschreibung = $("#quiz-description-edit").val();
+        quizheader.is_public = $("#publicSwitchEdit").is(":checked") ? 1 : 0
+        if (quizheader.quizname  == "") {
+          $('#errormsg').css("opacity", 100).text("Your Quiz needs a Title").fadeTo(4500, 0);
+          console.log("error creating quiz");
+          return;
+        }
+        localStorage.setItem("Quizheader", JSON.stringify(quizheader));
+        $.ajax({
+            url: 'http://localhost:3000/api/quiz/update_quiz',
+            method: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            cache: false,
+            dataType: 'json',
+            data: localStorage.getItem("Quizheader")
+        }).done(function (response) {
+            console.dir(response);
+            var quiz = JSON.parse(localStorage.getItem("Quizheader"));
+            quiz = response;
+            localStorage.setItem("Quizheader", JSON.stringify(quiz));
+        }).fail(function (jqXHR, statusText, error) {
+            console.dir(jqXHR.responseText);
+            return;
+        });
+        location.href= "/quiz_edit1"
+      });
     </script>
   </body>
 </html>
