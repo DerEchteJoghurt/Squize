@@ -263,11 +263,11 @@
             var quiz = JSON.parse(localStorage.getItem("Quizheader"));
             quiz.quiz_id = response.quiz_id;
             localStorage.setItem("Quizheader", JSON.stringify(quiz));
+            location.href= "/quiz_edit1"
         }).fail(function (jqXHR, statusText, error) {
             console.dir(jqXHR.responseText);
             return;
         });
-        location.href= "/quiz_edit1"
       })});
 
       $('#editquizform').submit(function(form) {
@@ -296,11 +296,11 @@
             var quiz = JSON.parse(localStorage.getItem("Quizheader"));
             quiz = response;
             localStorage.setItem("Quizheader", JSON.stringify(quiz));
+            location.href= "/quiz_edit1"
         }).fail(function (jqXHR, statusText, error) {
             console.dir(jqXHR.responseText);
             return;
         });
-        location.href= "/quiz_edit1"
       });
     </script>
   </body>
