@@ -236,9 +236,10 @@
                     cache: false,
                     dataType: 'json'
                 }).done(function (response) {
-                  $('#quiz-title-edit').attr('value', response.quizname);
+                  $('#quiz-title-edit').val(response.quizname);
                   $('#quiz-description-edit').text(response.beschreibung);
                   $('#publicSwitchEdit').prop('checked', response.is_public);
+                  $('#editquizform').data("quiz-id", quiz_id);
                 }).fail(function (jqXHR, statusText, error) {
                     alert(jqXHR.responseText);
                 });
@@ -301,6 +302,7 @@
         form.preventDefault();
 
         var quizheader = {quizname : "", beschreibung : ""};
+        quizheader.quiz_id = $('#editquizform').data("quiz-id");
         quizheader.lastedit = Date.now().toString();
         quizheader.quizname = $("#quiz-title-edit").val();
         quizheader.beschreibung = $("#quiz-description-edit").val();

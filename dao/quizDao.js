@@ -108,13 +108,11 @@ class QuizDao {
 
         return {changes : info.changes, quiz_id : info.lastInsertRowid};
     }
-    // TODO: update Quiz
-    updateQuiz(quizobject) {
-        var quiz = this.getQuizByName(quizobject)
 
-        var sql = 'INSERT INTO Quizze (quiz_id, user_id, quizname, last_edited, beschreibung, is_public) VALUES (?, ?, ?, ?, ?, ?)';
+    updateQuiz(quizobject) {
+        var sql = 'UPDATE Quizze SET quizname=?, last_edited=?, beschreibung=?, is_public=? WHERE quiz_id=?';
         var statement = this._conn.prepare(sql);
-        var info = statement.run([quiz.quiz_id, quiz.user_id, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public]);
+        var info = statement.run([quizobject.quizname.toString(), quizobject.lastedit, quizobject.beschreibung, quizobject.is_public, quizobject.quiz_id]);
 
         return {changes : info.changes, quiz : quizobject};
     }
