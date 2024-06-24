@@ -1,5 +1,3 @@
-
-
 class QuizDao {
     constructor(dbConnection) {
         this._conn = dbConnection;
@@ -37,54 +35,94 @@ class QuizDao {
         return result;
     }
 
+
+    getQuestionById(questionId) {
+
+    }
+
+    getQuestionByPosition(quizId, pos) {
+
+    }
+
+    addQuestion(quizObject) {
+        console.dir(quizObject);
+        var quiz_sql = 'INSERT INTO Questions (quiz_id, position, question, question_type) VALUES (?,?,?,?)';
+        var ans_sql = 'INSERT INTO Answers (question_id, answer_text, is_correct) VALUES (?,?,?)';
+        var quiz_statement = this._conn.prepare(quiz_sql);
+        var quiz_info = quiz_statement.run([quizObject.quiz_id, quizObject.question.pos, quizObject.question.question, quizObject.question.qtype]);
+        var ans_statement = this._conn.prepare(ans_sql);
+        var ans_info = [];
+        for (const key in quizObject.question.answer) {
+            i = 0;
+            if (Object.hasOwnProperty.call(quizObject.question.answer, key)) {
+                const element = quizObject.question.answer[key];
+                var correct = key == "correct" ? 1 : 0;
+                ans_info[i] = ans_statement.run([quiz_info.lastInsertRowid, element, correct])
+                console.dir(ans_info)
+            }
+            i++;
+        }
+        if (ans_info.every((value) => { return value == 1})) {
+            return {changes : quiz_info.changes, quiz_id : quiz_info.lastInsertRowid, ans_info : ans_info};
+        }
+        return {changes : quiz_info.changes, quiz_id : quiz_info.lastInsertRowid, ans_info : ans_info, errormsg : "Something went wrong!"};
+    }
+
+    updateQuestion(quizObject) {
+
+    }
+
+    deleteQuestion(quizObject) {
+    }
+
+
     getPopularQuizzes(amount) {
         var sql = 'SELECT * FROM Quizze ORDER BY aufrufe DESC LIMIT ?';
         var statement = this._conn.prepare(sql);
         var results = statement.all(amount);
         
         return results;
+
     }
 
     createQuiz(quizobject) {
-        var maxql = 'SELECT MAX(quiz_id) FROM Quizze';
-        var stmt = this._conn.prepare(maxql);
-        var max_id = stmt.get();
+        var placeholder_user = 0;
 
-        quiz = JSON.parse(quizobject);
+        var quiz = quizobject;
+        var sql = 'INSERT INTO Quizze (user_id, quizname, last_edited, beschreibung, is_public, aufrufe) VALUES (?, ?, ?, ?, ?, ?)';
+        var statement = this._conn.prepare(sql);
+        var info = statement.run([placeholder_user, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public, 0]);
+
+        return {changes : info.changes, quiz_id : info.lastInsertRowid};
+    }
+    // TODO: update Quiz
+    updateQuiz(quizobject) {
+        var quiz = this.getQuizByName(quizobject)
+
         var sql = 'INSERT INTO Quizze (quiz_id, user_id, quizname, last_edited, beschreibung, is_public) VALUES (?, ?, ?, ?, ?, ?)';
         var statement = this._conn.prepare(sql);
-        var info = statement.run([max_id + 1, 0, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public]);
+        var info = statement.run([quiz.quiz_id, quiz.user_id, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public]);
 
-        return info.changes;
+        return {changes : info.changes, quiz : quizobject};
     }
-
-    // updateQuiz(quizobject) {
-    //     var quiz = this.getQuizByName(quizobject)
-
-    //     var sql = 'INSERT INTO Quizze (quiz_id, user_id, quizname, last_edited, beschreibung, is_public) VALUES (?, ?, ?, ?, ?, ?)';
-    //     var statement = this._conn.prepare(sql);
-    //     var info = statement.run([quiz.quiz_id, quiz.user_id, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public]);
-
-    //     return info.changes;
-    // }
 
     deleteQuiz(quizname = "", quiz_id = 0) {
         if (quizname = "" && quiz_id == 0) {
-            return JSON.stringify({errormsg : "Du musst einen quizname oder eine quiz_id angeben"});
+            return {errormsg : "Du musst einen quizname oder eine quiz_id angeben"};
         }
         if(!(this.getQuizById(quiz_id) === undefined)) {
             var sql = 'DELETE FROM Quizze WHERE quiz_id=?';
             var statement = this._conn.prepare(sql);
             var info = statement.run(quiz_id);
-            return info.changes;
+            return {changes : info.changes};
         }
         if(!(this.getQuizByName(quizname) === undefined)) {
             var sql = 'DELETE FROM Quizze WHERE quizname=?'
             var statement = this._conn.prepare(sql);
             var info = statement.run(quizname);
-            return info.changes;
+            return {changes : info.changes};
         }
-        return JSON.stringify({errormsg : "Quiz konnte nicht gefunden werden, versuche es mit einem anderen identifier"});
+        return {errormsg : "Quiz konnte nicht gefunden werden, versuche es mit einem anderen identifier"};
     }
 
 }

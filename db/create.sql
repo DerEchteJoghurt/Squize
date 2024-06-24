@@ -22,7 +22,6 @@ CREATE TABLE Quizze (
 	is_public BOOLEAN,
 	aufrufe INTEGER,
 	FOREIGN KEY (user_id) REFERENCES User(user_id)
-
 );
 
 -- alle Quizfragen

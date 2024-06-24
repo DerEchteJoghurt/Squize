@@ -114,16 +114,10 @@
       function addQuestionToLocalStorage(questionobject) {
         var quiz = JSON.parse(localStorage.getItem("Quizheader"));
         if (!(quiz.hasOwnProperty("questions"))){
-          var questions = [];
-          questions.push({pos : 1, question : questionobject.question, answers : questionobject.answer});
-          console.log("question is first");
-          console.dir(JSON.stringify(questions));
-          quiz.questions = JSON.stringify(questions)
+          quiz.question = {pos : 1, question : questionobject.question, answer : questionobject.answer,  qtype : "mult"};
         }
         else {
-          var questions = JSON.parse(quiz.questions);
-          questions.push({pos : (questions[0].pos + 1),question : questionobject.question, answers : questionobject.answer});
-          quiz.questions = JSON.stringify(questions);
+          quiz.question = {pos : ((quiz.questions.pos) + 1), question : questionobject.question, answer : questionobject.answer, qtype : "mult"};
           console.log("not")
         }
         localStorage.setItem("Quizheader", JSON.stringify(quiz));
@@ -134,23 +128,57 @@
           var wrong = ["or","ol", "ur", "ul"];
           w = wrong.indexOf(correct);
           wrong.splice(w, 1);
-          addQuestionToLocalStorage({questsion : $("#question").val(), answer : {
-            correct : $(correct),
-            wrong1 : $(wrong[0]),
-            wrong2 : $(wrong[1]),
-            wrong3 : $(wrong[2])
+          addQuestionToLocalStorage({question : $("#question").val(), answer : {
+            correct : $(correct.toString()),
+            wrong1 : $(wrong[0].toString()),
+            wrong2 : $(wrong[1].toString()),
+            wrong3 : $(wrong[2].toString())
           }})
+          
+          $.ajax({
+            url: 'http://localhost:3000/api/quiz/add_question',
+            method: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            cache: false,
+            dataType: 'json',
+            data: localStorage.getItem("Quizheader")
+          }).done(function (response) {
+              console.dir(response);
+          }).fail(function (jqXHR, statusText, error) {
+              console.dir(jqXHR.responseText);
+              return;
+          });
+          location.href = "/profile";
         })
         $("#createbtn").on("click", () => {
-          addQuestionToLocalStorage({questsion : $("#question").val(), answer : {
-            correct : $(correct),
-            wrong1 : $(wrong[0]),
-            wrong2 : $(wrong[1]),
-            wrong3 : $(wrong[2])
-          }})})
-        $("#nextbtn").on("click", () => {
+          var correct = $("input[type='radio']:checked").val();
+          var wrong = ["or","ol", "ur", "ul"];
+          w = wrong.indexOf(correct);
+          wrong.splice(w, 1);
+          addQuestionToLocalStorage({question : $("#question").val(), answer : {
+            correct : $(correct.toString()),
+            wrong1 : $(wrong[0].toString()),
+            wrong2 : $(wrong[1].toString()),
+            wrong3 : $(wrong[2].toString())
+          }})
+          
+          $.ajax({
+            url: 'http://localhost:3000/api/quiz/add_question',
+            method: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            cache: false,
+            dataType: 'json',
+            data: localStorage.getItem("Quizheader")
+          }).done(function (response) {
+              console.dir(response);
+          }).fail(function (jqXHR, statusText, error) {
+              console.dir(jqXHR.responseText);
+              return;
+        });
         })
-    
+        $("#nextbtn").on("click", () => {
+          // TODO : next und prev. button
+        })
       });
     </script>
   </body>
