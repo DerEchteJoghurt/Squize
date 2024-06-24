@@ -35,6 +35,7 @@ class QuizDao {
         return result;
     }
 
+
     getQuestionById(questionId) {
 
     }
@@ -72,6 +73,15 @@ class QuizDao {
     }
 
     deleteQuestion(quizObject) {
+    }
+
+
+    getPopularQuizzes(amount) {
+        var sql = 'SELECT * FROM Quizze ORDER BY aufrufe DESC LIMIT ?';
+        var statement = this._conn.prepare(sql);
+        var results = statement.all(amount);
+        
+        return results;
 
     }
 
