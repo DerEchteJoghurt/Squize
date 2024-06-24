@@ -59,55 +59,7 @@
             </a>
           </div>
           <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-              <div class="col">
-                <div class="card shadow-sm h-100">
-                  <img width="100%" height="225" src="assets/quiz_placeholder.png" background="#55595c" color="#eceeef" class="card-img-top" text="Thumbnail"/>
-                  <div class="card-body d-flex flex-column">
-                    <h4 class="display-8">Wissenstest 1</h4>
-                    <p class="card-text">Teste dein Wissen in verschiedenen Arten bla bla bla</p>
-                    <div class="d-flex mt-auto justify-content-between align-items-center">
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href='/quiz_play1';">Start</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#viewModal">View</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card shadow-sm h-100">
-                  <img width="100%" height="225" src="assets/quiz_placeholder.png" background="#55595c" color="#eceeef" class="card-img-top" text="Thumbnail"/>
-                  <div class="card-body d-flex flex-column">
-                    <h4 class="display-8">Wissenstest 2</h4>
-                    <p class="card-text">Teste dein Wissen in verschiedenen Arten bla bla bla</p>
-                    <div class="d-flex mt-auto justify-content-between align-items-center">
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href='/quiz_play1';">Start</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#viewModal">View</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card shadow-sm h-100">
-                  <img width="100%" height="225" src="assets/quiz_placeholder.png" background="#55595c" color="#eceeef" class="card-img-top" text="Thumbnail"/>
-                  <div class="card-body d-flex flex-column">
-                    <h4 class="display-8">Wissenstest 3</h4>
-                    <p class="card-text">Teste dein Wissen in verschiedenen Arten bla bla bla und so weiter........</p>
-                    <div class="d-flex mt-auto justify-content-between align-items-center">
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href='/quiz_play1';">Start</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#viewModal">View</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="userQuizRow">
             </div>
           </div>
         </div>
@@ -122,8 +74,8 @@
               </div>
               <div class="modal-body">
                 <img width="100%" height="225" src="assets/quiz_placeholder.png" background="#55595c" color="#eceeef" class="card-img-top" text="Thumbnail"/>
-                <p>Teste dein Wissen in verschiedenen Arten bla bla bla und so weiter........</p>
-                <p class="fw-lighter">
+                <p id="exampleDescription">Teste dein Wissen in verschiedenen Arten bla bla bla und so weiter........</p>
+                <p class="fw-lighter" id="exampleInfo">
                   Created by: Matetrinker123<br>
                   Last updated: 2024-01-01
                 </p>
@@ -214,11 +166,86 @@
 
     <script type="module" src="js/main.js"></script>
     <script>
+    function createQuizCard(quiz_id, name, description, author) {
+      let content = '';
+      content += '<div class="col" style="min-width: 22rem;">';
+      content += '  <div class="card shadow-sm h-100">';
+      content += '    <img width="100%" height="225" src="assets/quiz_placeholder.png" background="#55595c" color="#eceeef" class="card-img-top" text="Thumbnail"/>';
+      content += '    <div class="card-body d-flex flex-column">';
+      content += '      <h4 class="display-8">' + name + '</h4>';
+      content += '      <p class="card-text">' + description + '</p>';
+      content += '      <div class="d-flex mt-auto justify-content-between align-items-center">';
+      content += '        <div class="btn-group">';
+      content += '          <button type="button" class="btn btn-sm btn-outline-success" onclick="location.href=\'/quiz_play1\';">Start</button>';
+      content += '          <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#viewModal" data-quiz-id="' + quiz_id + '" id="viewButton">View</button>';
+      content += '          <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal" data-quiz-id="' + quiz_id + '" id="editButton">Edit</button>';
+      content += '        </div>';
+      content += '        <small class="text-body-secondary">' + author + '</small>';
+      content += '      </div>';
+      content += '    </div>';
+      content += '  </div>';
+      content += '</div>';
+      return content;
+    }
+
     $(document).ready(function() {
       checkCurrentUser(function(user) {
         if (user) {
           console.log(user);
           $('#titleProfile').text(user.username + "'s Profile");
+
+          $.ajax({
+              url: '/api/quiz/user',
+              method: 'GET',
+              contentType: 'application/json; charset=utf-8',
+              cache: false,
+              dataType: 'json'
+          }).done(function (response) {
+              let content = '';
+
+              for (let entry of response) {
+                content += createQuizCard(entry.quiz_id, entry.quizname, entry.beschreibung, "Author"); // TODO
+              }
+
+              $('#userQuizRow').html(content);
+
+              $('[id=viewButton]').click(function(e) {
+                let quiz_id = $(e.target).data("quiz-id");
+                $.ajax({
+                    url: '/api/quiz/' + quiz_id,
+                    method: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    cache: false,
+                    dataType: 'json'
+                }).done(function (response) {
+                  $('#exampleModalLabel').text(response.quizname);
+                  $('#exampleDescription').text(response.beschreibung);
+                  // TODO
+                  $('#exampleInfo').html('Created by: Matetrinker123<br>Last updated: ' + response.last_edited);
+                }).fail(function (jqXHR, statusText, error) {
+                    alert(jqXHR.responseText);
+                });
+              });
+
+              $('[id=editButton]').click(function(e) {
+                let quiz_id = $(e.target).data("quiz-id");
+                $.ajax({
+                    url: '/api/quiz/' + quiz_id,
+                    method: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    cache: false,
+                    dataType: 'json'
+                }).done(function (response) {
+                  $('#quiz-title-edit').attr('value', response.quizname);
+                  $('#quiz-description-edit').text(response.beschreibung);
+                  $('#publicSwitchEdit').prop('checked', response.is_public);
+                }).fail(function (jqXHR, statusText, error) {
+                    alert(jqXHR.responseText);
+                });
+              });
+          }).fail(function (jqXHR, statusText, error) {
+              alert(jqXHR.responseText);
+          });
         } else {
           location.href = 'login';
         }

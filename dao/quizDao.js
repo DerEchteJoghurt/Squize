@@ -35,6 +35,13 @@ class QuizDao {
         return result;
     }
 
+    getQuizByUserId(userid) {
+        var sql = 'SELECT * FROM Quizze WHERE user_id=?';
+        var statement = this._conn.prepare(sql);
+        var result = statement.all(userid);
+        
+        return result;
+    }
 
     getQuestionById(questionId) {
 
@@ -85,13 +92,11 @@ class QuizDao {
 
     }
 
-    createQuiz(quizobject) {
-        var placeholder_user = 0;
-
+    createQuiz(quizobject, user) {
         var quiz = quizobject;
         var sql = 'INSERT INTO Quizze (user_id, quizname, last_edited, beschreibung, is_public, aufrufe) VALUES (?, ?, ?, ?, ?, ?)';
         var statement = this._conn.prepare(sql);
-        var info = statement.run([placeholder_user, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public, 0]);
+        var info = statement.run([user, quiz.quizname.toString(), quiz.lastedit, quiz.beschreibung, quiz.is_public, 0]);
 
         return {changes : info.changes, quiz_id : info.lastInsertRowid};
     }

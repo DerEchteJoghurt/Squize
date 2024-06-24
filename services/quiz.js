@@ -4,8 +4,13 @@ var serviceRouter = express.Router();
 
 
 serviceRouter.post('/quiz/create_quiz', function(request, response) {
+    if (!request.session || !request.session.loggedIn) {
+        response.status(400).json({ message: 'Not logged in' });
+        return;
+    }
+
     let quizDao = new QuizDao(request.app.locals.dbConnection);
-    let res = quizDao.createQuiz(request.body);
+    let res = quizDao.createQuiz(request.body, request.session.user.user_id);
     if (res.hasOwnProperty("errormsg")){
         response.status(400).json(res)
     }
@@ -21,6 +26,22 @@ serviceRouter.get('/quiz/popular', function(request, response) {
     }
 
     let results = quizDao.getPopularQuizzes(amount);
+    if (!results) {
+        response.status(400).json({ message: 'Failed to load quizzes' });
+        return;
+    }
+
+    response.status(200).json(results);
+});
+
+serviceRouter.get('/quiz/user', function(request, response) {
+    if (!request.session || !request.session.loggedIn) {
+        response.status(400).json({ message: 'Not logged in' });
+        return;
+    }
+
+    let quizDao = new QuizDao(request.app.locals.dbConnection);
+    let results = quizDao.getQuizByUserId(request.session.user.user_id);
     if (!results) {
         response.status(400).json({ message: 'Failed to load quizzes' });
         return;
