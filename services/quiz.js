@@ -50,6 +50,22 @@ serviceRouter.get('/quiz/user', function(request, response) {
     response.status(200).json(results);
 });
 
+serviceRouter.get('/quiz/search', function(request, response) {
+    if (!request.query.q) {
+        response.status(400).json({ message: 'Missing query' });
+        return;
+    }
+
+    let quizDao = new QuizDao(request.app.locals.dbConnection);
+    let results = quizDao.getQuizByQuery(request.query.q);
+    if (!results) {
+        response.status(400).json({ message: 'Failed to load quizzes' });
+        return;
+    }
+
+    response.status(200).json(results);
+});
+
 serviceRouter.get('/quiz/:id', function(request, response) {
     let quizDao = new QuizDao(request.app.locals.dbConnection);
     let result = quizDao.getQuizById(request.params.id);

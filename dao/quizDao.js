@@ -43,6 +43,14 @@ class QuizDao {
         return result;
     }
 
+    getQuizByQuery(query) {
+        var sql = 'SELECT * FROM Quizze WHERE quizname LIKE \'%\' || ? || \'%\'';
+        var statement = this._conn.prepare(sql);
+        var result = statement.all(query);
+        
+        return result;
+    }
+
     getQuestionById(questionId) {
 
     }

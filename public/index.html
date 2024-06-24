@@ -38,8 +38,8 @@
           </a>
         </div>
 
-        <form class="d-flex py-5 justify-content-center">
-          <input class="form-control me-2 w-50" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex py-5 justify-content-center" id="searchForm">
+          <input class="form-control me-2 w-50" type="search" placeholder="Search" aria-label="Search" id="searchQuery">
           <button class="btn btn-outline-success" type="submit">
             <i>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -49,6 +49,8 @@
             &nbsp; Search
           </button>
         </form>
+
+        <div id="searchResults"></div>
 
         <p class="display-6">Popular</h2>
         <div class="album py-5 bg-body-secondary rounded">
@@ -168,6 +170,57 @@
             });
         }).fail(function (jqXHR, statusText, error) {
             alert(jqXHR.responseText);
+        });
+
+        $('#searchForm').submit(function(form) {
+          form.preventDefault();
+
+          let searchq = $("#searchQuery").val();
+
+          $.ajax({
+              url: '/api/quiz/search?q=' + searchq,
+              method: 'GET',
+              contentType: 'application/json; charset=utf-8',
+              cache: false,
+              dataType: 'json'
+          }).done(function (response) {
+              let content = '';
+
+              content += '<p class="display-6">Search Results</h2>';
+              content += '<div class="album py-5 bg-body-secondary rounded">';
+              content += '  <div class="container">';
+              content += '    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">';
+
+              for (let entry of response) {
+                content += createQuizCard(entry.quiz_id, entry.quizname, entry.beschreibung, "Author"); // TODO
+              }
+
+              content += '    </div>';
+              content += '  </div>';
+              content += '</div>';
+
+              $('#searchResults').html(content);
+
+              $('[id=viewButton]').click(function(e) {
+                let quiz_id = $(e.target).data("quiz-id");
+                $.ajax({
+                    url: '/api/quiz/' + quiz_id,
+                    method: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    cache: false,
+                    dataType: 'json'
+                }).done(function (response) {
+                  $('#exampleModalLabel').text(response.quizname);
+                  $('#exampleDescription').text(response.beschreibung);
+                  // TODO
+                  $('#exampleInfo').html('Created by: Matetrinker123<br>Last updated: ' + response.last_edited);
+                }).fail(function (jqXHR, statusText, error) {
+                    alert(jqXHR.responseText);
+                });
+              });
+          }).fail(function (jqXHR, statusText, error) {
+              alert(jqXHR.responseText);
+          });          
         });
       });
     </script>
