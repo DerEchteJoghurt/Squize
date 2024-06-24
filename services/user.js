@@ -57,6 +57,13 @@ serviceRouter.post('/user/register', function(request, response) {
     if (user.hasOwnProperty("message")){
         response.status(401).json(user);
     } else {
+        request.session.loggedIn = true;
+        request.session.user = {
+            user_id: user,
+            username: request.body.username,
+            email: request.body.email
+        };
+
         response.status(200).json(user);
     }
 });

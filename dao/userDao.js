@@ -73,7 +73,7 @@ class UserDao {
             return undefined;
         }
 
-        return result;
+        return result.lastInsertRowid;
     }
 
     updateUsername(user_id, username) {
