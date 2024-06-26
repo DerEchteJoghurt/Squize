@@ -67,17 +67,17 @@ class QuizDao {
         var quiz_info = quiz_statement.run([quizObject.quiz_id, quizObject.question.pos, quizObject.question.question, quizObject.question.qtype]);
         var ans_statement = this._conn.prepare(ans_sql);
         var ans_info = [];
+        let i = 0;
         for (const key in quizObject.question.answer) {
-            i = 0;
             if (Object.hasOwnProperty.call(quizObject.question.answer, key)) {
                 const element = quizObject.question.answer[key];
                 var correct = key == "correct" ? 1 : 0;
-                ans_info[i] = ans_statement.run([quiz_info.lastInsertRowid, element, correct])
+                ans_info[i] = ans_statement.run([quiz_info.lastInsertRowid, JSON.stringify(element), correct])
                 console.dir(ans_info)
             }
             i++;
         }
-        if (ans_info.every((value) => { return value == 1})) {
+        if (ans_info.every((value) => { return value.changes === 1})) {
             return {changes : quiz_info.changes, quiz_id : quiz_info.lastInsertRowid, ans_info : ans_info};
         }
         return {changes : quiz_info.changes, quiz_id : quiz_info.lastInsertRowid, ans_info : ans_info, errormsg : "Something went wrong!"};

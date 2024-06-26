@@ -129,10 +129,10 @@
           w = wrong.indexOf(correct);
           wrong.splice(w, 1);
           addQuestionToLocalStorage({question : $("#question").val(), answer : {
-            correct : $(correct.toString()),
-            wrong1 : $(wrong[0].toString()),
-            wrong2 : $(wrong[1].toString()),
-            wrong3 : $(wrong[2].toString())
+            correct : $('#' + correct.toString()).val(),
+            wrong1 : $('#' + wrong[0].toString()).val(),
+            wrong2 : $('#' + wrong[1].toString()).val(),
+            wrong3 : $('#' + wrong[2].toString()).val()
           }})
           
           $.ajax({
@@ -144,11 +144,11 @@
             data: localStorage.getItem("Quizheader")
           }).done(function (response) {
               console.dir(response);
+              location.href = "/profile";
           }).fail(function (jqXHR, statusText, error) {
               console.dir(jqXHR.responseText);
               return;
           });
-          location.href = "/profile";
         })
         $("#createbtn").on("click", () => {
           var correct = $("input[type='radio']:checked").val();
@@ -156,10 +156,10 @@
           w = wrong.indexOf(correct);
           wrong.splice(w, 1);
           addQuestionToLocalStorage({question : $("#question").val(), answer : {
-            correct : $(correct.toString()),
-            wrong1 : $(wrong[0].toString()),
-            wrong2 : $(wrong[1].toString()),
-            wrong3 : $(wrong[2].toString())
+            correct : $('#' + correct.toString()).val(),
+            wrong1 : $('#' + wrong[0].toString()).val(),
+            wrong2 : $('#' + wrong[1].toString()).val(),
+            wrong3 : $('#' + wrong[2].toString()).val()
           }})
           
           $.ajax({

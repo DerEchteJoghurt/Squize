@@ -110,6 +110,7 @@ serviceRouter.post('/quiz/add_question', function(request, response) {
     let res = quizDao.addQuestion(request.body);
     if (res.hasOwnProperty("errormsg")){
         response.status(400).json(res)
+        return;
     }
     response.status(200).json(res)
 });
