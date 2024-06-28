@@ -38,3 +38,5 @@ or start the server in dev mode (with hot reload):
 ```bash
 npm run dev
 ```
+gehe danach in den ordner `db/` und lies die `README.md` in diesem ordner
+
